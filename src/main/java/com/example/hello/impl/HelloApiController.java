@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloApiController implements HelloApi {
 
-    @Override
-    public ResponseEntity<HelloResponse> getHello() {
-        HelloResponse response = new HelloResponse();
-        response.setMessage("Hello, World!");
-        return ResponseEntity.ok(response);
-    }
+  @Override
+  public ResponseEntity<HelloResponse> getHello() {
+    HelloResponse response = new HelloResponse();
+    response.setMessage("Hello, World!");
+    return ResponseEntity.ok(response);
+  }
 }
