@@ -1,18 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.7</version>
+    <relativePath/> <!-- always resolve from repository -->
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <artifactId>hello-openapi</artifactId>
   <version>1.0.0</version>
   <name>Hello OpenAPI Example</name>
-  <packaging>jar</packaging>
 
   <properties>
-    <java.version>17</java.version>
-    <spring.boot.version>3.3.4</spring.boot.version>
+    <java.version>21</java.version>
+    <spring.boot.version>3.5.7</spring.boot.version>
     <openapi.generator.version>7.8.0</openapi.generator.version>
   </properties>
 
@@ -42,6 +48,11 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.6</version>
     </dependency>
 
     <dependency>
@@ -82,8 +93,11 @@
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
+                <useJakartaEe>true</useJakartaEe>
                 <useTags>true</useTags>
+                <java21>true</java21>
                 <dateLibrary>java8</dateLibrary>
+                <hideGenerationTimestamp>true</hideGenerationTimestamp>
               </configOptions>
             </configuration>
           </execution>
