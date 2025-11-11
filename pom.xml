@@ -12,7 +12,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
-  <artifactId>hello-openapi</artifactId>
+  <artifactId>spring-boot-rest-template</artifactId>
   <version>1.0.0</version>
   <name>Hello OpenAPI Example</name>
 
