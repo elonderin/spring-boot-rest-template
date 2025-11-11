@@ -1,4 +1,4 @@
-package com.example.hello.impl;
+package com.example.hello.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

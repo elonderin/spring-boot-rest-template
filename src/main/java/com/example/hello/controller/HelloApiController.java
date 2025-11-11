@@ -1,4 +1,4 @@
-package com.example.hello.impl;
+package com.example.hello.controller;
 
 import com.example.hello.api.HelloApi;
 import com.example.hello.model.HelloResponse;
