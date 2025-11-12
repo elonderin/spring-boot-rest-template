@@ -86,10 +86,10 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
+        <!-- we must have at least a) one plugin to append to argLine OR b) define it in order for @{argLine} is not causing "Error: could not open `{argLine}'" -->
+        <argLine/>
         <!-- add properties here that are not so important in the main sections b/c they are not for customization in general but are needed for DRY and for the common setup to work -->
         <maven-surefire-plugin.argLine>
-          <!-- always needed -->
-          @{argLine}
           <!-- disables logging of logback bootstrapping -->
           -Dlogback.statusListenerClass=ch.qos.logback.core.status.NopStatusListener
           <!-- disable WARNING 'Sharing is only supported for boot loader classes', ie: JVM class data sharing (CDS)  -->
@@ -139,6 +139,21 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <!-- must be config'ed, otherwise surefire/failsafe with not work with lombok causing spurious "compiler: symbol not found" -->
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
       <!-- Add generated sources -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -165,7 +180,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>${maven-surefire-plugin.argLine}</argLine>
+          <!-- gotcha: @{argLine} is handled internally by the plugin is not a common maven idiom, hence it cannot be added in the property -->
+          <argLine>@{argLine} ${maven-surefire-plugin.argLine}</argLine>
           <useFile>false</useFile>
           <includes>
             <include>**/*Test.java</include>
@@ -176,7 +192,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
-          <argLine>${maven-surefire-plugin.argLine}</argLine>
+          <argLine>@{argLine} ${maven-surefire-plugin.argLine}</argLine>
           <useFile>false</useFile>
           <includes>
             <include>**/*IT.java</include>
