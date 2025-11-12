@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: '@project.artifactId@'
+  main:
+    banner-mode: off
+  jackson:
+    default-property-inclusion: NON_NULL
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: #use a yaml list here so merging works
+          - health
+          - prometheus
+  tracing:
+    enabled: false
+    sampling:
+      probability: 1.0
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          platform-iam-token-service:
+            requests: true
+  endpoint:
+    prometheus:
+      access: read_only
+    health:
+      access: read_only
+
+logging.level:
+  root: INFO
+  de.tomsit: INFO
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - env
+  endpoint:
+    env:
+      access: unrestricted

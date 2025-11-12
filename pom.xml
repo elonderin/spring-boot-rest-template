@@ -11,15 +11,16 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
-  <artifactId>spring-boot-rest-template</artifactId>
-  <version>1.0.0</version>
-  <name>Hello OpenAPI Example</name>
+  <groupId>de.tomsit.example</groupId>
+  <artifactId>restservice</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
   <properties>
     <java.version>21</java.version>
     <spring.boot.version>3.5.7</spring.boot.version>
     <openapi.generator.version>7.8.0</openapi.generator.version>
+
+    <restservice-api.basePackage>${project.groupId}.${project.artifactId}</restservice-api.basePackage>
   </properties>
 
   <dependencies>
@@ -27,6 +28,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- Lombok -->
@@ -73,6 +79,28 @@
 
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>common-infra</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <!-- we must have at least a) one plugin to append to argLine OR b) define it in order for @{argLine} is not causing "Error: could not open `{argLine}'" -->
+        <argLine/>
+        <!-- add properties here that are not so important in the main sections b/c they are not for customization in general but are needed for DRY and for the common setup to work -->
+        <maven-surefire-plugin.argLine>
+          <!-- disables logging of logback bootstrapping -->
+          -Dlogback.statusListenerClass=ch.qos.logback.core.status.NopStatusListener
+          <!-- disable WARNING 'Sharing is only supported for boot loader classes', ie: JVM class data sharing (CDS)  -->
+          -Xshare:off
+          <!-- disable WARNING: "A Java agent has been loaded dynamically", see https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3 -->
+          -XX:+EnableDynamicAgentLoading
+        </maven-surefire-plugin.argLine>
+      </properties>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
       <!-- Spring Boot plugin -->
@@ -95,8 +123,8 @@
             <configuration>
               <inputSpec>${project.basedir}/src/main/openapi/hello.yaml</inputSpec>
               <generatorName>spring</generatorName>
-              <apiPackage>com.example.hello.api</apiPackage>
-              <modelPackage>com.example.hello.model</modelPackage>
+              <apiPackage>${restservice-api.basePackage}.api</apiPackage>
+              <modelPackage>${restservice-api.basePackage}.model</modelPackage>
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
@@ -109,6 +137,21 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <!-- must be config'ed, otherwise surefire/failsafe with not work with lombok causing spurious "compiler: symbol not found" -->
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
       </plugin>
 
       <!-- Add generated sources -->
@@ -137,7 +180,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+          <!-- gotcha: @{argLine} is handled internally by the plugin is not a common maven idiom, hence it cannot be added in the property -->
+          <argLine>@{argLine} ${maven-surefire-plugin.argLine}</argLine>
           <useFile>false</useFile>
           <includes>
             <include>**/*Test.java</include>
@@ -148,7 +192,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
-          <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+          <argLine>@{argLine} ${maven-surefire-plugin.argLine}</argLine>
           <useFile>false</useFile>
           <includes>
             <include>**/*IT.java</include>

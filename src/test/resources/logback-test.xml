@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="false" scanPeriod="30 seconds">
+
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <Pattern>%d{HH:mm:ss.SSS} [%-5level][%thread]:%logger{36} [%method:%line] %msg%n</Pattern>
+    </encoder>
+    <!-- this trick helps to cover code logic like `if log.isDebugEnabled()) {...}` or similar without polluting console -->
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <!-- to prevent accidental checkins: set the env var LOGBACK_FILTER_LEVEL to override it -->
+      <level>${LOGBACK_FILTER_LEVEL:-DEBUG}</level>
+    </filter>
+  </appender>
+
+  <logger name="com.example" level="DEBUG"/>
+
+  <root level="WARN">
+    <appender-ref ref="consoleAppender"/>
+  </root>
+</configuration>
