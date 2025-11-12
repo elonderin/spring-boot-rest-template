@@ -1,4 +1,4 @@
-package com.example.hello.infra.jackson;
+package de.tomsit.example.restservice.infra.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;

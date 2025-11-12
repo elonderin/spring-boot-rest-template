@@ -1,8 +1,8 @@
-package com.example.hello.controller;
+package de.tomsit.example.restservice.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.hello.model.HelloResponse;
+import de.tomsit.example.restservice.model.HelloResponse;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

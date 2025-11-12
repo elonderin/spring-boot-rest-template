@@ -11,16 +11,16 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
-  <artifactId>spring-boot-rest-template</artifactId>
-  <version>1.0.0</version>
-  <name>Hello OpenAPI Example</name>
+  <groupId>de.tomsit.example</groupId>
+  <artifactId>restservice</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
   <properties>
     <java.version>21</java.version>
     <spring.boot.version>3.5.7</spring.boot.version>
     <openapi.generator.version>7.8.0</openapi.generator.version>
 
+    <restservice-api.basePackage>${project.groupId}.${project.artifactId}</restservice-api.basePackage>
   </properties>
 
   <dependencies>
@@ -123,8 +123,8 @@
             <configuration>
               <inputSpec>${project.basedir}/src/main/openapi/hello.yaml</inputSpec>
               <generatorName>spring</generatorName>
-              <apiPackage>com.example.hello.api</apiPackage>
-              <modelPackage>com.example.hello.model</modelPackage>
+              <apiPackage>${restservice-api.basePackage}.api</apiPackage>
+              <modelPackage>${restservice-api.basePackage}.model</modelPackage>
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>

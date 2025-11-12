@@ -1,4 +1,4 @@
-package com.example.hello.infra.app;
+package de.tomsit.example.restservice.infra.app;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
