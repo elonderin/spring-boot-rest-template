@@ -4,10 +4,22 @@ info:
   version: 1.0.0
   description: Simple Hello World API
 paths:
-  /hello:
+  /public/hello:
     get:
       summary: Returns a greeting
-      operationId: getHello
+      operationId: publicHello
+      tags:
+        - hello
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelloResponse'
+  /admin/hello:
+    get:
+      operationId: adminHello
       tags:
         - hello
       responses:
