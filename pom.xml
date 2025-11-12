@@ -128,6 +128,7 @@
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
+                <skipDefaultInterface>true</skipDefaultInterface>
                 <useJakartaEe>true</useJakartaEe>
                 <useTags>true</useTags>
                 <java21>true</java21>
