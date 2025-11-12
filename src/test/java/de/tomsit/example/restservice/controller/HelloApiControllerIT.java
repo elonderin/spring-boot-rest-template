@@ -24,9 +24,10 @@ class HelloApiControllerIT {
 
   @Test
   void testAdminHello() {
+    restTemplate = restTemplate.withBasicAuth("admin", "adminpass");
+
     assertThat(getHelloFrom("/admin/hello"))
         .returns(HelloApiController.ADMIN_HELLO_WORLD, HelloResponse::getMessage);
-
   }
 
   private HelloResponse getHelloFrom(String path) {

@@ -3,6 +3,7 @@ package de.tomsit.example.restservice.controller;
 import de.tomsit.example.restservice.api.HelloApi;
 import de.tomsit.example.restservice.model.HelloResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,6 +17,7 @@ public class HelloApiController implements HelloApi {
     return returnHello(PUBLIC_HELLO_WORLD);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @Override
   public ResponseEntity<HelloResponse> adminHello() {
     return returnHello(ADMIN_HELLO_WORLD);
