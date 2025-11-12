@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <property name="ROOT_LOGLEVEL" value="INFO"/>
+  <property name="PROJECT_LOGLEVEL" value="DEBUG"/>
+  <property name="CONSOLE_LOGLEVEL" value="DEBUG"/>
+
+  <springProperty scope="context" name="APPLICATION_NAME" source="spring.application.name"/>
+  <springProperty scope="context" name="APPLICATION_VERSION" source="app.version"/>
+  <springProperty scope="context" name="INSTANCE_NAME" source="app.instance"/>
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="consoleAppender">
+    <encoder>
+      <Pattern>%d{HH:mm:ss.SSS} [%-5level][%thread]:%logger{36} [%method:%line] %msg%n
+      </Pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>${CONSOLE_LOGLEVEL}</level>
+    </filter>
+  </appender>
+
+  <logger name="${PROJECT_PACKAGE}" level="${PROJECT_LOGLEVEL}"/>
+  <!-- set to level="DEBUG" in order to see the payload of requests and responses -->
+  <logger name="reactor.netty.http.client.HttpClient" level="WARN"/>
+
+  <root level="${ROOT_LOGLEVEL}">
+    <appender-ref ref="consoleAppender"/>
+  </root>
+</configuration>
