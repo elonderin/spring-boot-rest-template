@@ -3,6 +3,7 @@ package de.tomsit.example.restservice.controller;
 import static org.hamcrest.Matchers.equalTo;
 
 import de.tomsit.example.restservice.model.HelloResponse;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,17 +23,40 @@ class HelloApiControllerIT {
                  .exchange()
                  .expectStatus().isOk()
                  .expectBody(HelloResponse.class)
-                 .value(HelloResponse::getMessage, equalTo(HelloApiController.PUBLIC_HELLO_WORLD));
+                 .value(HelloResponse::getMessage,
+                        equalTo(HelloApiController.buildMessage("public", "anonymousUser")));
   }
 
-  @Test
-  void testAdminHello() {
-    webTestClient.get()
-                 .uri("/admin/hello")
-                 .headers(h -> h.setBasicAuth("admin", "adminpass"))
-                 .exchange()
-                 .expectStatus().isOk()
-                 .expectBody(HelloResponse.class)
-                 .value(HelloResponse::getMessage, equalTo(HelloApiController.ADMIN_HELLO_WORLD));
+  @Nested
+  class AdminHelloTests {
+
+    @Test
+    void withoutAuth_shouldReturnUnauthorized() {
+      webTestClient.get()
+                   .uri("/admin/hello")
+                   .exchange()
+                   .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    void withUserAuth_shouldReturnForbidden() {
+      webTestClient.get()
+                   .uri("/admin/hello")
+                   .headers(h -> h.setBasicAuth("user", "password"))
+                   .exchange()
+                   .expectStatus().isForbidden();
+    }
+
+    @Test
+    void withAdminAuth_shouldReturnText() {
+      webTestClient.get()
+                   .uri("/admin/hello")
+                   .headers(h -> h.setBasicAuth("admin", "adminpass"))
+                   .exchange()
+                   .expectStatus().isOk()
+                   .expectBody(HelloResponse.class)
+                   .value(HelloResponse::getMessage,
+                          equalTo(HelloApiController.buildMessage("admin", "admin")));
+    }
   }
 }
