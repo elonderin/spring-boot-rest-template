@@ -26,11 +26,16 @@
     {
       "username": "admin",
       "enabled": true,
+      "email": "admin@example.com",
       "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "User",
+      "requiredActions": [],
       "credentials": [
         {
           "type": "password",
-          "value": "admin"
+          "value": "admin",
+          "temporary": false
         }
       ],
       "realmRoles": [
@@ -40,11 +45,16 @@
     {
       "username": "user",
       "enabled": true,
+      "email": "user@example.com",
       "emailVerified": true,
+      "firstName": "Normal",
+      "lastName": "User",
+      "requiredActions": [],
       "credentials": [
         {
           "type": "password",
-          "value": "user"
+          "value": "user",
+          "temporary": false
         }
       ],
       "realmRoles": [
