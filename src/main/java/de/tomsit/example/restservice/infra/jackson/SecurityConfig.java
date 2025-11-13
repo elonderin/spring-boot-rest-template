@@ -65,6 +65,7 @@ public class SecurityConfig {
   @Bean
   JwtAuthenticationConverter jwtKeycloakAuthenticationConverter() {
     var converter = new JwtAuthenticationConverter();
+    converter.setPrincipalClaimName("preferred_username");
 
     converter.setJwtGrantedAuthoritiesConverter(jwt -> {
       var roles = new ArrayList<GrantedAuthority>();

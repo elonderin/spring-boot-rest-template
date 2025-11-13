@@ -1,0 +1,22 @@
+###
+POST localhost:9080/realms/test-realm/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type = password &
+client_id = test-client &
+username = admin &
+password = admin
+
+> {%
+  client.global.set("access_token", response.body.access_token);
+%}
+
+
+####
+GET localhost:8080/admin/hello
+Authorization: Bearer {{access_token}}
+
+> {%
+  console.log("body: " + JSON.stringify(response.body));
+%}
