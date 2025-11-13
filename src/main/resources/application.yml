@@ -2,11 +2,6 @@ app:
   version: '@project.version@'
   oauth2.issuer-uri: http://localhost:9080/realms/test-realm
 
-
-
-server:
-  port: 8080
-
 springdoc:
   api-docs:
     path: /api-docs
