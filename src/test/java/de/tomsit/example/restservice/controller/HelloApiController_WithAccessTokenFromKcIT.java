@@ -9,11 +9,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
 
+@TestPropertySource(properties = {
+    "app.oauth2.issuer-uri=http://localhost:9080/realms/test-realm"
+})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class HelloApiControllerWithKcIT {
+class HelloApiController_WithAccessTokenFromKcIT {
 
   @Value("${app.oauth2.issuer-uri}")
   private String realmUri;
