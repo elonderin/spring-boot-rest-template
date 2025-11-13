@@ -1,5 +1,7 @@
 app:
   version: '@project.version@'
+  oauth2.issuer-uri: http://localhost:9080/realms/test-realm
+
 
 
 server:
@@ -15,3 +17,8 @@ spring:
   profiles:
     group:
       default: common
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${app.oauth2.issuer-uri}

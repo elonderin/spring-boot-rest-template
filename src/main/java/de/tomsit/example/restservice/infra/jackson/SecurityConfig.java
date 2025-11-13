@@ -1,21 +1,22 @@
 package de.tomsit.example.restservice.infra.jackson;
 
-import javax.crypto.spec.SecretKeySpec;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -54,33 +55,31 @@ public class SecurityConfig {
         .and()
         .oauth2ResourceServer(oauth ->
                                   oauth
-                                      .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                      .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtKeycloakAuthenticationConverter()))
         )
     ;
 
     return http.build();
   }
 
-  private JwtAuthenticationConverter jwtAuthenticationConverter() {
-    var converter = new JwtGrantedAuthoritiesConverter();
-    converter.setAuthoritiesClaimName("roles");    // claim to read
-    converter.setAuthorityPrefix("");         // add prefix if needed
-
-    var jwtAuthConverter = new JwtAuthenticationConverter();
-    jwtAuthConverter.setJwtGrantedAuthoritiesConverter(converter);
-    return jwtAuthConverter;
-  }
-
   @Bean
-  public JwtDecoder jwtDecoder() {
-    //bean must be defined here b/c overriding it in a test causes an IllegalStateException
-    var secret = "testsecret1234567890testsecret1234567890";
-    var key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+  JwtAuthenticationConverter jwtKeycloakAuthenticationConverter() {
+    var converter = new JwtAuthenticationConverter();
 
-    return NimbusJwtDecoder
-        .withSecretKey(key)
-        .build();
+    converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+      var roles = new ArrayList<GrantedAuthority>();
+
+      var realmAccess = (Map<String, Object>) jwt.getClaim("realm_access");
+      if (realmAccess != null && realmAccess.get("roles") instanceof List<?> list) {
+        list.forEach(r ->
+                         roles.add(new SimpleGrantedAuthority("ROLE_" + r))
+        );
+      }
+
+      return roles;
+    });
+
+    return converter;
   }
-
 
 }

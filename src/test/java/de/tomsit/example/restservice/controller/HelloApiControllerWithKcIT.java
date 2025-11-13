@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,11 +13,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class KeycloakTestIT {
+class HelloApiControllerWithKcIT {
+
+  @Value("${app.oauth2.issuer-uri}")
+  private String realmUri;
 
   @Autowired
   private WebTestClient webTestClient;
-
 
   @Test
   void adminCanAccessAdminEndpoint() {
@@ -30,7 +33,6 @@ class KeycloakTestIT {
                  .expectBody(String.class)
                  .value(body -> assertThat(body).isNotBlank());
   }
-
 
   @Test
   void userCannotAccessAdminEndpoint() {
@@ -47,7 +49,7 @@ class KeycloakTestIT {
   public String getAccessToken(String username, String password) {
     var rest = new RestTemplate();
 
-    var url = "http://localhost:9080/realms/test-realm/protocol/openid-connect/token";
+    var url = realmUri + "/protocol/openid-connect/token";
 
     var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
