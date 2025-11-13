@@ -5,58 +5,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class KeycloakTestIT {
 
   @Autowired
-  TestRestTemplate rest;
+  private WebTestClient webTestClient;
 
-  @LocalServerPort
-  int port;
 
   @Test
   void adminCanAccessAdminEndpoint() {
-    var token = getToken("admin", "admin");
+    var token = getAccessToken("admin", "admin");
 
-    var headers = new HttpHeaders();
-    headers.setBearerAuth(token);
-
-    var response = rest.exchange(
-        "http://localhost:" + port + "/admin/hello",
-        HttpMethod.GET,
-        new HttpEntity<>(headers),
-        String.class
-    );
-
-    assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+    webTestClient.get()
+                 .uri("/admin/hello")
+                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                 .exchange()
+                 .expectStatus().is2xxSuccessful()
+                 .expectBody(String.class)
+                 .value(body -> assertThat(body).isNotBlank());
   }
+
 
   @Test
   void userCannotAccessAdminEndpoint() {
-    var token = getToken("user", "user");
+    var token = getAccessToken("user", "user");
 
-    var headers = new HttpHeaders();
-    headers.setBearerAuth(token);
-
-    var response = rest.exchange(
-        "http://localhost:" + port + "/admin/hello",
-        HttpMethod.GET,
-        new HttpEntity<>(headers),
-        String.class
-    );
-
-    assertThat(response.getStatusCode().value()).isEqualTo(403);
+    webTestClient.get()
+                 .uri("/admin/hello")
+                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                 .exchange()
+                 .expectStatus().isForbidden();
   }
 
-  public String getToken(String username, String password) {
+
+  public String getAccessToken(String username, String password) {
     var rest = new RestTemplate();
 
     var url = "http://localhost:9080/realms/test-realm/protocol/openid-connect/token";
