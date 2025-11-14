@@ -1,4 +1,4 @@
-package de.tomsit.example.restservice.infra.jackson;
+package de.tomsit.example.restservice.infra;
 
 import java.util.ArrayList;
 import java.util.List;
