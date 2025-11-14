@@ -1,3 +1,5 @@
+#### this script simulates a client obtaining an access token from Keycloak and using it to access a protected resource
+
 ###
 POST localhost:9080/realms/test-realm/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded

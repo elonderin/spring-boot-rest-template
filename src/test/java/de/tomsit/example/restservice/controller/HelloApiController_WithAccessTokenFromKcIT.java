@@ -13,6 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
 
+// u need to start docker compose @ /docker/keycloak.yaml
 @TestPropertySource(properties = {
     "app.oauth2.issuer-uri=http://localhost:9080/realms/test-realm"
 })
