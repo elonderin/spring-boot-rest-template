@@ -1,4 +1,4 @@
-package de.tomsit.example.restservice.infra.jackson;
+package de.tomsit.example.restservice.infra;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;

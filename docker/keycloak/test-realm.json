@@ -1,0 +1,65 @@
+{
+  "realm": "test-realm",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "test-client",
+      "directAccessGrantsEnabled": true,
+      "publicClient": true,
+      "redirectUris": [
+        "*"
+      ],
+      "defaultRoles": []
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN"
+      },
+      {
+        "name": "USER"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@example.com",
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "User",
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "user",
+      "enabled": true,
+      "email": "user@example.com",
+      "emailVerified": true,
+      "firstName": "Normal",
+      "lastName": "User",
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "USER"
+      ]
+    }
+  ]
+}

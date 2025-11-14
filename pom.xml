@@ -17,8 +17,10 @@
 
   <properties>
     <java.version>21</java.version>
+    <!-- versions  -->
     <spring.boot.version>3.5.7</spring.boot.version>
     <openapi.generator.version>7.8.0</openapi.generator.version>
+    <jjwt-xxx.version>0.12.6</jjwt-xxx.version>
 
     <restservice-api.basePackage>${project.groupId}.${project.artifactId}</restservice-api.basePackage>
   </properties>
@@ -27,13 +29,41 @@
     <!-- Spring Boot -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jjwt-xxx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt-xxx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt-xxx.version}</version>
+      <scope>test</scope>
+    </dependency>
+
 
     <!-- Lombok -->
     <dependency>
@@ -74,6 +104,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -128,6 +163,7 @@
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
+                <skipDefaultInterface>true</skipDefaultInterface>
                 <useJakartaEe>true</useJakartaEe>
                 <useTags>true</useTags>
                 <java21>true</java21>
