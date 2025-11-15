@@ -45,6 +45,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
@@ -105,11 +109,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -198,12 +197,11 @@
                 ApiCallback.java,ApiClient.java,ApiException.java,ApiResponse.java,Configuration.java,Pair.java,ProgressRequestBody.java,ProgressResponseBody.java,StringUtil.java,ApiKeyAuth.java,Authentication.java,HttpBasicAuth.java,JSON.java,OAuth.java,EncodingUtils.java,HttpBearerAuth.java,RFC3339DateFormat.java,JavaTimeFormatter.java
               </supportingFilesToGenerate>
               <configOptions>
-                <library>restclient</library>
+                <library>webclient</library>
                 <java21>true</java21>
                 <useJakartaEe>true</useJakartaEe>
                 <dateLibrary>java8</dateLibrary>
-                <!-- WORKAROUND: the generated UserApi is missing the import for @Valid whyever, so i'm skipping it here.-->
-                <useBeanValidation>false</useBeanValidation>
+                <useBeanValidation>true</useBeanValidation>
                 <openApiNullable>false</openApiNullable>
               </configOptions>
             </configuration>
