@@ -23,6 +23,7 @@
     <jjwt-xxx.version>0.12.6</jjwt-xxx.version>
 
     <restservice-api.basePackage>${project.groupId}.${project.artifactId}</restservice-api.basePackage>
+    <petstore-api.basePackage>io.swagger.petstore3</petstore-api.basePackage>
   </properties>
 
   <dependencies>
@@ -43,6 +44,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 
     <dependency>
@@ -106,11 +111,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
-      <scope>test</scope>
-    </dependency>
 
   </dependencies>
 
@@ -149,9 +149,16 @@
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
         <version>${openapi.generator.version}</version>
+        <configuration>
+          <generateApiDocumentation>false</generateApiDocumentation>
+          <generateApiTests>false</generateApiTests>
+          <generateModelTests>false</generateModelTests>
+          <generateModelDocumentation>false</generateModelDocumentation>
+          <generateSupportingFiles>true</generateSupportingFiles>
+        </configuration>
         <executions>
           <execution>
-            <id>generate-api</id>
+            <id>oasgen-hello-api</id>
             <goals>
               <goal>generate</goal>
             </goals>
@@ -160,7 +167,7 @@
               <generatorName>spring</generatorName>
               <apiPackage>${restservice-api.basePackage}.api</apiPackage>
               <modelPackage>${restservice-api.basePackage}.model</modelPackage>
-              <output>${project.build.directory}/generated-sources/openapi</output>
+              <output>${project.build.directory}/generated-sources/openapi/hello</output>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
                 <skipDefaultInterface>true</skipDefaultInterface>
@@ -172,6 +179,34 @@
               </configOptions>
             </configuration>
           </execution>
+          <execution>
+            <id>oasgen-petstore-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/openapi/petstore.yaml</inputSpec>
+              <output>${project.build.directory}/generated-sources/openapi/petstore/</output>
+              <generatorName>java</generatorName>
+              <generateModels>true</generateModels>
+              <invokerPackage>${petstore-api.basePackage}.client</invokerPackage>
+              <apiPackage>${petstore-api.basePackage}.api</apiPackage>
+              <modelPackage>${petstore-api.basePackage}.model</modelPackage>
+              <!-- only generate the needed files -->
+              <supportingFilesToGenerate>
+                ApiCallback.java,ApiClient.java,ApiException.java,ApiResponse.java,Configuration.java,Pair.java,ProgressRequestBody.java,ProgressResponseBody.java,StringUtil.java,ApiKeyAuth.java,Authentication.java,HttpBasicAuth.java,JSON.java,OAuth.java,EncodingUtils.java,HttpBearerAuth.java,RFC3339DateFormat.java,JavaTimeFormatter.java
+              </supportingFilesToGenerate>
+              <configOptions>
+                <library>webclient</library>
+                <java21>true</java21>
+                <useJakartaEe>true</useJakartaEe>
+                <dateLibrary>java8</dateLibrary>
+                <useBeanValidation>true</useBeanValidation>
+                <openApiNullable>false</openApiNullable>
+              </configOptions>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
 

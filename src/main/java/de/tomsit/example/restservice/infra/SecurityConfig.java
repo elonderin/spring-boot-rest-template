@@ -2,7 +2,6 @@ package de.tomsit.example.restservice.infra;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +42,7 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
+  @SuppressWarnings("removal")
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -70,7 +70,7 @@ public class SecurityConfig {
     converter.setJwtGrantedAuthoritiesConverter(jwt -> {
       var roles = new ArrayList<GrantedAuthority>();
 
-      var realmAccess = (Map<String, Object>) jwt.getClaim("realm_access");
+      var realmAccess = jwt.getClaimAsMap("realm_access");
       if (realmAccess != null && realmAccess.get("roles") instanceof List<?> list) {
         list.forEach(r ->
                          roles.add(new SimpleGrantedAuthority("ROLE_" + r))
