@@ -9,23 +9,17 @@ import org.springframework.web.client.RestClient;
 
 
 @Configuration
-public class OpenApiClientConfig {
+public class RestApiClientsConfig {
 
   @Bean
-  public ApiClient apiClient(RestClient.Builder restClientBuilder) {
-    ApiClient client = new ApiClient(
+  public PetApi petApi() {
+    var apiClient = new ApiClient(
         RestClient.builder().build()
         , null
         , new RFC3339DateFormat()
     );
 
-    client.setBasePath("https://petstore3.swagger.io/api/v3/pet");
-
-    return client;
-  }
-
-  @Bean
-  public PetApi petApi(ApiClient apiClient) {
+    apiClient.setBasePath("https://petstore3.swagger.io/api/v3");
     return new PetApi(apiClient);
   }
 }
