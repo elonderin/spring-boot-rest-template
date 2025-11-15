@@ -23,6 +23,7 @@
     <jjwt-xxx.version>0.12.6</jjwt-xxx.version>
 
     <restservice-api.basePackage>${project.groupId}.${project.artifactId}</restservice-api.basePackage>
+    <petstore-api.basePackage>io.swagger.petstore3</petstore-api.basePackage>
   </properties>
 
   <dependencies>
@@ -64,6 +65,15 @@
       <scope>test</scope>
     </dependency>
 
+
+    <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents.core5</groupId>
+      <artifactId>httpcore5</artifactId>
+    </dependency>
 
     <!-- Lombok -->
     <dependency>
@@ -151,7 +161,7 @@
         <version>${openapi.generator.version}</version>
         <executions>
           <execution>
-            <id>generate-api</id>
+            <id>oasgen-hello-api</id>
             <goals>
               <goal>generate</goal>
             </goals>
@@ -172,6 +182,30 @@
               </configOptions>
             </configuration>
           </execution>
+          <execution>
+            <id>oasgen-petstore-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/openapi/petstore.yaml</inputSpec>
+              <output>${project.build.directory}/generated-sources/openapi/petstore/</output>
+              <generatorName>java</generatorName>
+              <generateModels>true</generateModels>
+              <invokerPackage>${petstore-api.basePackage}.client</invokerPackage>
+              <apiPackage>${petstore-api.basePackage}.api</apiPackage>
+              <modelPackage>${petstore-api.basePackage}.model</modelPackage>
+              <configOptions>
+                <library>apache-httpclient</library>
+                <java21>true</java21>
+                <useJakartaEe>true</useJakartaEe>
+                <dateLibrary>java8</dateLibrary>
+                <useBeanValidation>true</useBeanValidation>
+                <openApiNullable>false</openApiNullable>
+              </configOptions>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
 
