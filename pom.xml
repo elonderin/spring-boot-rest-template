@@ -256,7 +256,7 @@
           <useFile>false</useFile>
           <includes>
             <include>**/*Test.java</include>
-            <include>**/*TestST.java</include>
+            <include>**/*ST.java</include>
           </includes>
         </configuration>
       </plugin>
