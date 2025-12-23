@@ -121,7 +121,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <!-- we must have at least a) one plugin to append to argLine OR b) define it in order for @{argLine} is not causing "Error: could not open `{argLine}'" -->
+        <!-- we must have at least a) one plugin to append to argLine OR b) define it in order for @{argLine} not causing: "Error: could not open `{argLine}'" -->
         <argLine/>
         <!-- add properties here that are not so important in the main sections b/c they are not for customization in general but are needed for DRY and for the common setup to work -->
         <maven-surefire-plugin.argLine>
@@ -251,7 +251,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <!-- gotcha: @{argLine} is handled internally by the plugin is not a common maven idiom, hence it cannot be added in the property -->
+          <!-- gotcha: @{argLine} is handled internally by the plugin! note: @{var} is not a common maven idiom, hence it cannot be added in the property -->
           <argLine>@{argLine} ${maven-surefire-plugin.argLine}</argLine>
           <useFile>false</useFile>
           <includes>
