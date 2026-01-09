@@ -3,6 +3,7 @@ package de.tomsit.example.restservice.infra;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.swagger.petstore3.api.PetApi;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ class PetApiTest {
   PetApi petApi;
 
   @Test
+  @Disabled("2026 01 09 pestore seems to broken ATM")
   void findByStatus_DoesntNotFail() {
     var pets = petApi.findPetsByStatus("available")
                      .take(4)
